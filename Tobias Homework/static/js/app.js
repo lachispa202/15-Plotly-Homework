@@ -1,44 +1,41 @@
 // Belly Button Biodiversity Homework
 
-// TEST Subject ID Information:
+function init() {
 
-// var jsData;
-//function start() {
+    // TEST Subject ID Information:
 
-var selector = d3.select('#selDataset');
-d3.json("./static/js/data/samples.json").then((importedData) => {
-    console.log(importedData);
-    var data = importedData;
-    var subjectID = data.names;
-    subjectID.forEach((ID) => {
-        selector
-            .append('option')
-            .text(ID)
-            .property('value', ID);
-    });
-    const selectedID = subjectID[0];
-    console.log(selectedID)
-    updateMetadata(selectedID);
-})
-
-// }
-// Demographic Info:
-function updateMetadata(selectedID) {
+    var selector = d3.select('#selDataset');
     d3.json("./static/js/data/samples.json").then((importedData) => {
-        var data = importedData
-        var metadata = data.metadata;
-        var filterArray = metadata.filter(sampleObject => sampleObject.id == selectedID);
-        var result = filterArray[0];
-        var demoPanel = d3.select('#sample-metadata');
-        demoPanel.html("");
-        Object.entries(result).forEach(([key, value]) => {
-            demoPanel.append("h6").text(`${key.toUpperCase()}: ${value}`)
-
-        })
-    })
+        console.log(importedData);
+        var data = importedData;
+        var subjectID = data.names;
+        subjectID.forEach((ID) => {
+            selector
+                .append('option')
+                .text(ID)
+                .property('value', ID);
+        });
+        const button = subjectID[0]
+        // d3.selectAll('#selDataset').on('change', updateMetadata);
+    });
 }
 
+// function updateMetadata() {
 
+// Demographic Info:
+d3.json("./static/js/data/samples.json").then((importedData) => {
+    var data = importedData
+    var metadata = data.metadata;
+    var filterArray = metadata.filter(sampleObject => sampleObject.id);
+    var result = filterArray[0];
+    var demoPanel = d3.select('#sample-metadata');
+    demoPanel.html("");
+    Object.entries(result).forEach(([key, value]) => {
+        demoPanel.append("h6").text(`${key}: ${value}`)
+
+    })
+});
+// }
 
 // Plotly for graphs
 
@@ -64,8 +61,8 @@ d3.json("./static/js/data/samples.json").then((importedData) => {
             color: otu_ids,
             colorscale: "Blue"
         }
-
     };
+
     // Create the data array for the plot
     var chartData = [trace];
 
@@ -87,6 +84,7 @@ d3.json("./static/js/data/samples.json").then((importedData) => {
         type: "bar",
         orientation: "h"
     };
+
     // Create the data array for the plot
     var chartData = [trace1];
 
@@ -98,6 +96,9 @@ d3.json("./static/js/data/samples.json").then((importedData) => {
 
     // Plot the chart to a div tag with id "plot"
     Plotly.newPlot('bar', chartData, layout);
-});
+})
 
 // }
+
+
+init();
